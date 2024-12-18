@@ -1,0 +1,22 @@
+.footer {
+    background-color: #222222;/* Background color */
+    text-align: center;         /* Center-align the text */
+    padding: 20px 0;            /* Vertical padding */
+    position: fixed;            /* Fix the footer at the bottom */
+    bottom: 0;                  /* Place at the bottom of the screen */
+    width: 100%;                /* Take up the full width */
+    z-index: 1000;              /* Ensure footer is above other content */
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;          /* Increase font size */
+    font-style: italic;         /* Apply italic style for the quote */
+    color: #555;              /* Text color */
+    line-height: 1.5;           /* Set line height */
+  }
+  
+  .quote-text strong {
+    font-weight: bold;          /* Make the author's name bold */
+    color: #5c5c5c;              /* Darker color for the author's name */
+  }
+  
