@@ -7,7 +7,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using imsbackend.Business.Abstract.Interfaces;
-using imsbackend.Business.Concrete.Services;
 using imsbackend.Entities.Concrete;
 using ImmovableManagementSystem.Entities.DTOs;
 
@@ -17,8 +16,8 @@ namespace imsbackend.Controllers.Concrete
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private AuthInterface _authRepository;
-        private IConfiguration _configuration;
+        private readonly AuthInterface _authRepository;
+        private readonly IConfiguration _configuration;
 
         public AuthController(AuthInterface authRepository, IConfiguration configuration)
         {
@@ -29,67 +28,91 @@ namespace imsbackend.Controllers.Concrete
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
-            if (await _authRepository.UserExists(registerDTO.Email))
+            try
             {
-                ModelState.AddModelError("Email", "Email is already taken");
+                if (await _authRepository.UserExists(registerDTO.Email))
+                {
+                    ModelState.AddModelError("Email", "Email is already taken");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var userToCreate = new User
+                {
+                    Name = registerDTO.Name,
+                    Surname = registerDTO.Surname,
+                    Email = registerDTO.Email,
+                    Phone = registerDTO.Phone,
+                    Address = registerDTO.Address,
+                    Role = registerDTO.Role
+                };
+
+                var createdUser = await _authRepository.Register(userToCreate, registerDTO.Password);
+                return StatusCode(201); // Created
             }
-            if (!ModelState.IsValid)
+            catch (Exception ex)
             {
-                return BadRequest(ModelState);
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
-            var userToCreate = new User
-            {
-                Name = registerDTO.Name,
-                Surname = registerDTO.Surname,
-                Email = registerDTO.Email,
-                Phone = registerDTO.Phone,
-                Address = registerDTO.Address,
-                Role = registerDTO.Role
-            };
-            var createdUser = await _authRepository.Register(userToCreate, registerDTO.Password);
-            return StatusCode(201);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] LoginDTO loginDTO)
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
-            var user = await _authRepository.Login(loginDTO.Email, loginDTO.Password);
-            if (user == null)
+            try
             {
-                return Unauthorized();
-            }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("Appsettings:Token").Value);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
+                var user = await _authRepository.Login(loginDTO.Email, loginDTO.Password);
+                if (user == null)
                 {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role)
-                }),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
-            };
+                    return Unauthorized();
+                }
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_configuration.GetSection("Appsettings:Token").Value);
 
-            return Ok(new { Token = tokenString });
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim(ClaimTypes.Role, user.Role)
+                    }),
+                    Expires = DateTime.Now.AddDays(1),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+                };
+
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = tokenHandler.WriteToken(token);
+
+                return Ok(new { Token = tokenString });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByUserId(int id)
         {
-            var user = await _authRepository.GetUserById(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                var user = await _authRepository.GetUserById(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(user);
             }
-            return Ok(user);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
     }
 }

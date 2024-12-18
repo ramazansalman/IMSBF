@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using imsbackend.Business.Abstract.Interfaces;
@@ -20,52 +21,94 @@ namespace imsbackend.Controllers.Concrete
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Log>>> GetAllLog()
         {
-            var logs = await _service.ListLog();
-            return Ok(logs);
+            try
+            {
+                var logs = await _service.ListLog();
+                return Ok(logs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Log>> GetLogById(int id)
         {
-            var log = await _service.GetLogById(id);
-            if (log == null)
+            try
             {
-                return NotFound();
+                var log = await _service.GetLogById(id);
+                if (log == null)
+                {
+                    return NotFound();
+                }
+                return log;
             }
-            return log;
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<Log>> AddLog(Log log)
         {
-            await _service.AddLog(log);
-            return CreatedAtAction(nameof(GetLogById), new { id = log.Id }, log);
+            try
+            {
+                await _service.AddLog(log);
+                return CreatedAtAction(nameof(GetLogById), new { id = log.Id }, log);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateLog(int id, Log log)
         {
-            if (id != log.Id)
+            try
             {
-                return BadRequest();
-            }
+                if (id != log.Id)
+                {
+                    return BadRequest();
+                }
 
-            await _service.UpdateLog(log);
-            return NoContent();
+                await _service.UpdateLog(log);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLog(int id)
         {
-            await _service.DeleteLog(id);
-            return NoContent();
+            try
+            {
+                await _service.DeleteLog(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpGet("search")]
         public async Task<IActionResult> SearchLogs(string term)
         {
-            var logs = await _service.SearchLogsAsync(term);
-            return Ok(logs);
+            try
+            {
+                var logs = await _service.SearchLogsAsync(term);
+                return Ok(logs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using imsbackend.Business.Abstract.Interfaces;
 using imsbackend.Entities.Concrete;
@@ -20,21 +20,33 @@ namespace imsbackend.Controllers.Concrete
         [HttpGet]
         public IActionResult GetAll()
         {
-            var result = _city.GetAll();
-            return Ok(result);
+            try
+            {
+                var result = _city.GetAll();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var city = await _city.GetByIdAsync(id);
-
-            if (city == null)
+            try
             {
-                return NotFound();
+                var city = await _city.GetByIdAsync(id);
+                if (city == null)
+                {
+                    return NotFound();
+                }
+                return Ok(city);
             }
-
-            return Ok(city);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
     }
 }

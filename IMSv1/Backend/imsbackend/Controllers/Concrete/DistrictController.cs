@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using imsbackend.Business.Abstract.Interfaces;
-using imsbackend.Entities.Concrete;
 
 namespace imsbackend.Controllers.Concrete
 {
@@ -21,34 +20,51 @@ namespace imsbackend.Controllers.Concrete
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _districtService.GetAll();
-            return Ok(result);
+            try
+            {
+                var result = await _districtService.GetAll();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var district = await _districtService.GetByIdAsync(id);
-
-            if (district == null)
+            try
             {
-                return NotFound();
+                var district = await _districtService.GetByIdAsync(id);
+                if (district == null)
+                {
+                    return NotFound();
+                }
+                return Ok(district);
             }
-
-            return Ok(district);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpGet("by-city/{cityId}")]
         public async Task<IActionResult> GetByCityId(int cityId)
         {
-            var districts = await _districtService.GetByCityIdAsync(cityId);
-
-            if (districts == null || !districts.Any())
+            try
             {
-                return NotFound();
+                var districts = await _districtService.GetByCityIdAsync(cityId);
+                if (districts == null || !districts.Any())
+                {
+                    return NotFound();
+                }
+                return Ok(districts);
             }
-
-            return Ok(districts);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
     }
 }

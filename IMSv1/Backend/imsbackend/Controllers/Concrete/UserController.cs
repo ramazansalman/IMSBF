@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using imsbackend.Business.Abstract.Interfaces;
 using imsbackend.Entities.Concrete;
+using System;
 
 namespace imsbackend.Controllers.Concrete
 {
@@ -62,12 +63,24 @@ namespace imsbackend.Controllers.Concrete
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var result = await _userService.DeleteAsync(id);
-            if (!result)
+            try
             {
-                return NotFound();
+                var result = await _userService.DeleteAsync(id);
+                if (!result)
+                {
+                    return NotFound(new { Message = $"User with ID {id} was not found." });
+                }
+                return NoContent();
             }
-            return NoContent();
+            catch (Exception ex)
+            {
+                // Log the exception (if you have a logger, you can use it here)
+                // _logger.LogError(ex, "An error occurred while deleting the user.");
+
+                // Return a generic error message
+                return StatusCode(500, new { Message = "An unexpected error occurred.", Details = ex.Message });
+            }
         }
+
     }
 }
