@@ -1,5 +1,7 @@
 <h2>Immovables</h2>
-<button class="btn btn-primary my-2" (click)="openForm()">Add Immovable</button>
+<button (click)="toggleForm()" class="btn btn-primary">
+  {{ isFormOpen ? 'Close' : 'Add Immovable' }}
+</button>
 <button class="btn btn-secondary my-2" (click)="loadData()">Refresh</button>
 <button class="btn btn-danger my-2" (click)="deleteSelected()" [disabled]="selectedImmovables.size === 0">Delete Selected</button>
 
@@ -28,12 +30,13 @@
     <tr>
       <th><input type="checkbox" (change)="toggleAll($event)" /></th>
       <th>ID</th>
+      <th>City Name</th>
+      <th>District Name</th>
+      <th>Neighborhood Name</th>
       <th>Block</th>
       <th>Parcel</th>
       <th>Type</th>
       <th>Coordinates</th>
-      <th>Neighborhood ID</th>
-      <th>User ID</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -41,12 +44,13 @@
     <tr *ngFor="let immovable of immovables">
       <td><input type="checkbox" (change)="toggleSelection(immovable.id)" [checked]="selectedImmovables.has(immovable.id)" /></td>
       <td>{{ immovable.id }}</td>
+      <td>{{ immovable.cityName }}</td>
+      <td>{{ immovable.districtName }}</td>
+      <td>{{ immovable.neighborhoodName }}</td>
       <td>{{ immovable.block }}</td>
       <td>{{ immovable.parcel }}</td>
       <td>{{ immovable.type }}</td>
       <td>{{ immovable.coordinates }}</td>
-      <td>{{ immovable.neighborhoodId }}</td>
-      <td>{{ immovable.userId }}</td>
       <td>
         <button class="btn btn-danger" (click)="deleteImmovable(immovable.id); $event.stopPropagation();">Delete</button>
       </td>

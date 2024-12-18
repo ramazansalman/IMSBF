@@ -8,9 +8,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./immovable.component.css'],
 })
 export class ImmovableComponent implements OnInit {
-  immovables: Immovable[] = [];
+  immovables: (Immovable & { cityName: string; districtName: string; neighborhoodName: string })[] = [];
   selectedImmovables: Set<number> = new Set();
   newImmovable: Partial<Immovable> | null = null;
+  isFormOpen: boolean = false;
 
   constructor(private immovableService: ImmovableService, private router: Router) {}
 
@@ -19,27 +20,49 @@ export class ImmovableComponent implements OnInit {
   }
 
   loadData() {
-    this.immovableService.getAll().subscribe((data) => {
-      this.immovables = data;
-    });
+    this.immovableService.getAll().subscribe(
+      (data: Immovable[]) => {
+        this.immovables = data.map((immovable) => ({
+          ...immovable,
+          cityName: immovable.neighborhood.district.city.name,
+          districtName: immovable.neighborhood.district.name,
+          neighborhoodName: immovable.neighborhood.name,
+        }));
+        this.selectedImmovables = new Set(
+          Array.from(this.selectedImmovables).filter(id =>
+            this.immovables.some(immovable => immovable.id === id)
+          )
+        );
+      },
+      (error) => {
+        console.error('Error loading immovables:', error);
+        alert('Failed to load immovables. Please try again later.');
+      }
+    );
   }
 
-  openForm() {
-    this.newImmovable = {
-      block: '',
-      parcel: '',
-      type: '',
-      coordinates: '',
-      neighborhoodId: 1,
-      userId: 1,
-    };
+  toggleForm() {
+    this.isFormOpen = !this.isFormOpen;
+    if (this.isFormOpen) {
+      this.newImmovable = {
+        block: '',
+        parcel: '',
+        type: '',
+        coordinates: '',
+        neighborhoodId: 1,
+        userId: 1,
+      };
+    } else {
+      this.newImmovable = null;
+    }
   }
 
   createImmovable() {
     if (this.newImmovable) {
       this.immovableService.create(this.newImmovable as Immovable).subscribe(() => {
         this.newImmovable = null;
-        this.loadData(); // Verileri yeniler
+        this.isFormOpen = false;
+        this.loadData();
         this.router.navigate(['/immovable']);
       });
     }
@@ -51,7 +74,7 @@ export class ImmovableComponent implements OnInit {
     });
   }
 
-  toggleSelection(id: number) {
+  toggleSelection(id: number): void {
     if (this.selectedImmovables.has(id)) {
       this.selectedImmovables.delete(id);
     } else {
@@ -59,17 +82,32 @@ export class ImmovableComponent implements OnInit {
     }
   }
 
+  toggleAll(event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+
+    if (isChecked) {
+      this.selectedImmovables = new Set(this.immovables.map(immovable => immovable.id));
+    } else {
+      this.selectedImmovables.clear();
+    }
+  }
+
   deleteSelected() {
     const ids = Array.from(this.selectedImmovables);
-    ids.forEach((id) => {
-      this.immovableService.delete(id).subscribe(() => {
+    this.immovableService.deleteMultiple(ids).subscribe(
+      () => {
         this.loadData();
-      });
-    });
-    this.selectedImmovables.clear();
+        this.selectedImmovables.clear();
+      },
+      (error) => {
+        console.error('Error deleting selected immovables:', error);
+        alert('Failed to delete selected immovables. Please try again later.');
+      }
+    );
   }
 
   cancelForm() {
     this.newImmovable = null;
+    this.isFormOpen = false;
   }
 }

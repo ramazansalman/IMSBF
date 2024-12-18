@@ -3,6 +3,11 @@ using System;
 using System.Threading.Tasks;
 using imsbackend.Business.Abstract.Interfaces;
 using imsbackend.Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using imsbackend.DataAccess;
+using System.Linq;
+
 
 namespace imsbackend.Controllers.Concrete
 {
@@ -11,10 +16,12 @@ namespace imsbackend.Controllers.Concrete
     public class ImmovableController : ControllerBase
     {
         private readonly ImmovableInterface _immovableService;
+        private readonly AppDbContext _context;
 
-        public ImmovableController(ImmovableInterface immovableService)
+        public ImmovableController(ImmovableInterface immovableService, AppDbContext context)
         {
             _immovableService = immovableService;
+            _context = context;
         }
 
         [HttpGet]
@@ -112,5 +119,32 @@ namespace imsbackend.Controllers.Concrete
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+        [HttpPost("deleteMultiple")]
+        public IActionResult DeleteMultiple([FromBody] List<int> ids)
+        {
+            if (ids == null || !ids.Any()) // Check if list is null or empty
+            {
+                return BadRequest("No IDs provided.");
+            }
+
+            try
+            {
+                var immovablesToDelete = _context.Immovables.Where(i => ids.Contains(i.Id)).ToList();
+
+                if (immovablesToDelete.Any())
+                {
+                    _context.Immovables.RemoveRange(immovablesToDelete);
+                    _context.SaveChanges();
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
     }
 }
