@@ -7,7 +7,9 @@ import { FooterComponent } from './footer/footer.component';
 import { OlMapComponent } from './ol-map/ol-map.component';
 import { MapComponent } from './pages/map/map.component';
 import { NavbarComponent } from './navbar/navbar.component';
-
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms'; // FormsModule'u ekleyin
+import { ImmovableComponent } from './pages/immovable/immovable.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -15,11 +17,14 @@ import { NavbarComponent } from './navbar/navbar.component';
     FooterComponent,
     OlMapComponent,
     MapComponent,
-    NavbarComponent
+    NavbarComponent,
+    ImmovableComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

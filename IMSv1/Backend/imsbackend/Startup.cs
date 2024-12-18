@@ -70,9 +70,8 @@ namespace imsbackend
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseCors("AllowOrigin");
             app.UseAuthorization();
             app.UseAuthentication();
 
@@ -81,7 +80,7 @@ namespace imsbackend
                 endpoints.MapControllers();
             });
 
-            app.UseCors("AllowOrigin");
+
         }
     }
 }

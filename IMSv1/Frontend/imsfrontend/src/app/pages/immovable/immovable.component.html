@@ -1,0 +1,55 @@
+<h2>Immovables</h2>
+<button class="btn btn-primary my-2" (click)="openForm()">Add Immovable</button>
+<button class="btn btn-secondary my-2" (click)="loadData()">Refresh</button>
+<button class="btn btn-danger my-2" (click)="deleteSelected()" [disabled]="selectedImmovables.size === 0">Delete Selected</button>
+
+<div *ngIf="newImmovable" class="form-popup">
+  <h3>Add Immovable</h3>
+  <form (ngSubmit)="createImmovable()" #immovableForm="ngForm">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Block" [(ngModel)]="newImmovable.block" name="block" required />
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Parcel" [(ngModel)]="newImmovable.parcel" name="parcel" required />
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Type" [(ngModel)]="newImmovable.type" name="type" required />
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Coordinates" [(ngModel)]="newImmovable.coordinates" name="coordinates" required />
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <button type="button" class="btn btn-secondary" (click)="cancelForm()">Cancel</button>
+  </form>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><input type="checkbox" (change)="toggleAll($event)" /></th>
+      <th>ID</th>
+      <th>Block</th>
+      <th>Parcel</th>
+      <th>Type</th>
+      <th>Coordinates</th>
+      <th>Neighborhood ID</th>
+      <th>User ID</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let immovable of immovables">
+      <td><input type="checkbox" (change)="toggleSelection(immovable.id)" [checked]="selectedImmovables.has(immovable.id)" /></td>
+      <td>{{ immovable.id }}</td>
+      <td>{{ immovable.block }}</td>
+      <td>{{ immovable.parcel }}</td>
+      <td>{{ immovable.type }}</td>
+      <td>{{ immovable.coordinates }}</td>
+      <td>{{ immovable.neighborhoodId }}</td>
+      <td>{{ immovable.userId }}</td>
+      <td>
+        <button class="btn btn-danger" (click)="deleteImmovable(immovable.id); $event.stopPropagation();">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
