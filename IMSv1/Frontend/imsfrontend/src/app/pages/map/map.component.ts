@@ -3,6 +3,7 @@ import OLMap from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
+import { fromLonLat } from 'ol/proj';
 
 @Component({
   selector: 'app-map',
@@ -11,7 +12,6 @@ import OSM from 'ol/source/OSM';
 })
 export class MapComponent implements OnInit {
   map: OLMap;
-
   ngOnInit() {
     this.map = new OLMap({
       target: 'map',
@@ -21,9 +21,13 @@ export class MapComponent implements OnInit {
         })
       ],
       view: new View({
-        center: [0, 0],
-        zoom: 2
+        //center: [3654512.89, 4441163.96], // Turkey (EPSG:3857)
+        center: fromLonLat([35.11, 38.50]), // Ankara
+        zoom: 7,
+        projection: 'EPSG:3857'
       })
+      
     });
   }
 }
+

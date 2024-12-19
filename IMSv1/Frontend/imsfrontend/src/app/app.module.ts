@@ -10,6 +10,9 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'; // FormsModule'u ekleyin
 import { ImmovableComponent } from './pages/immovable/immovable.component';
+import { TestpageComponent } from './pages/testpage/testpage.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,12 +22,14 @@ import { ImmovableComponent } from './pages/immovable/immovable.component';
     MapComponent,
     NavbarComponent,
     ImmovableComponent,
+    TestpageComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
