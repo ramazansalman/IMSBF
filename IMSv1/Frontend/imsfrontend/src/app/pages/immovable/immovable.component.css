@@ -1,26 +1,51 @@
+.pagination {
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* General Pagination Link Style */
+.pagination .page-link {
+    color: #222222; /* Matches dark gray */
+    background-color: #f8f9fa; /* Light gray background */
+    border: 1px solid #dee2e6; /* Border color */
+}
+
+/* Active Page */
+.pagination .page-item.active .page-link {
+    color: #fff; /* White text */
+    background-color: #222222; /* Dark gray, matches header/footer */
+    border-color: #222222; /* Same dark gray for border */
+}
+
+/* Hover Effect */
+.pagination .page-link:hover {
+    color: #fff; /* White text */
+    background-color: #444444; /* Darker gray for hover */
+    border-color: #444444; /* Hover border color */
+}
+
+/* Disabled (Inactive) State */
 .pagination .page-item.disabled .page-link {
     pointer-events: none;
-    color: #6c757d;
-    background-color: #fff;
-    border-color: #dee2e6;
-  }
-  
-  .pagination .page-item.active .page-link {
-    z-index: 1;
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-  }
-  
-  .pagination .page-link {
-    color: #007bff;
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-  }
-  
-  .pagination .page-link:hover {
-    color: #0056b3;
-    background-color: #e9ecef;
-    border-color: #dee2e6;
-  }
-  
+    color: #6c757d; /* Light gray text for disabled */
+    background-color: #f8f9fa; /* Light gray background */
+    border-color: #dee2e6; /* Border color */
+}
+
+/* Primary Button */
+.btn-primary {
+    background-color: #222222; /* Dark gray matches header/footer */
+    border-color: #222222;
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background-color: #444444; /* Medium gray tone */
+    border-color: #444444;
+}
+
+/* Danger Button */
+.btn-danger {
+    background-color: #555555; /* Slightly darker reddish-gray */
+    border-color: #555555;
+}
