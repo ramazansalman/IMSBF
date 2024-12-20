@@ -1,2 +1,18 @@
-<!-- <h2>Map</h2> -->
 <div id="map" style="width: 100%; height: 100vh;"></div>
+
+<!-- Info Box -->
+<div *ngIf="showInfoBox" class="map-info">
+  <p>
+    <strong>Lon, Lat:</strong> {{ clickedCoordinates }}
+    <button class="btn btn-primary btn-sm" (click)="copyToClipboard(clickedCoordinates)">Copy</button>
+  </p>
+  <p>
+    <strong>DMS:</strong> {{ dmsCoordinates }}
+    <button class="btn btn-primary btn-sm" (click)="copyToClipboard(dmsCoordinates)">Copy</button>
+  </p>
+</div>
+
+<!-- Popup Notification -->
+<div *ngIf="showPopup" class="popup">
+  Coordinates Copied!
+</div>
