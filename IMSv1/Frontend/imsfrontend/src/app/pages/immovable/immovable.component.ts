@@ -12,6 +12,12 @@ export class ImmovableComponent implements OnInit {
   selectedImmovables: Set<number> = new Set();
   newImmovable: Partial<Immovable> | null = null;
   isFormOpen: boolean = false;
+  
+  // Pagination variables
+  itemsPerPage: number = 5;
+  currentPage: number = 1;
+  totalPages: number = 0;
+  paginatedData: any[] = [];
 
   constructor(private immovableService: ImmovableService, private router: Router) {}
 
@@ -49,6 +55,7 @@ export class ImmovableComponent implements OnInit {
           districtName: immovable.neighborhood.district.name,
           neighborhoodName: immovable.neighborhood.name,
         }));
+        this.updatePagination();
       },
       (error) => {
         console.error('Error loading immovables:', error);
@@ -56,7 +63,44 @@ export class ImmovableComponent implements OnInit {
       }
     );
   }
-  
+  updatePagination(): void {
+    this.totalPages = Math.ceil(this.immovables.length / this.itemsPerPage);
+    this.paginateData();
+  }
+  paginateData(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedData = this.immovables.slice(startIndex, endIndex);
+  }  
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.paginateData();
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.paginateData();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginateData();
+    }
+  }
+
+  goToFirstPage(): void {
+    this.currentPage = 1;
+    this.paginateData();
+  }
+
+  goToLastPage(): void {
+    this.currentPage = this.totalPages;
+    this.paginateData();
+  }
 
   toggleForm() {
     this.isFormOpen = !this.isFormOpen;
