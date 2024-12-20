@@ -1,15 +1,12 @@
 html, body {
-    height: 100%;
-    margin: 0;
-  }
-  
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Sayfanın tamamını kapla */
-  }
-  
-  .content {
-    flex: 1; /* Ana içeriği esnetir */
-  }
-  
+  height: 100%;
+  margin: 0;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Sayfanın tamamını kapla */
+}
+.content {
+  flex: 1; /* Ana içeriği esnetir */ 
+}

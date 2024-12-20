@@ -19,6 +19,27 @@ export class ImmovableComponent implements OnInit {
     this.loadData();
   }
 
+  // loadData() {
+  //   this.immovableService.getAll().subscribe(
+  //     (data: Immovable[]) => {
+  //       this.immovables = data.map((immovable) => ({
+  //         ...immovable,
+  //         cityName: immovable.neighborhood.district.city.name,
+  //         districtName: immovable.neighborhood.district.name,
+  //         neighborhoodName: immovable.neighborhood.name,
+  //       }));
+  //       this.selectedImmovables = new Set(
+  //         Array.from(this.selectedImmovables).filter(id =>
+  //           this.immovables.some(immovable => immovable.id === id)
+  //         )
+  //       );
+  //     },
+  //     (error) => {
+  //       console.error('Error loading immovables:', error);
+  //       alert('Failed to load immovables. Please try again later.');
+  //     }
+  //   );
+  // }
   loadData() {
     this.immovableService.getAll().subscribe(
       (data: Immovable[]) => {
@@ -28,11 +49,6 @@ export class ImmovableComponent implements OnInit {
           districtName: immovable.neighborhood.district.name,
           neighborhoodName: immovable.neighborhood.name,
         }));
-        this.selectedImmovables = new Set(
-          Array.from(this.selectedImmovables).filter(id =>
-            this.immovables.some(immovable => immovable.id === id)
-          )
-        );
       },
       (error) => {
         console.error('Error loading immovables:', error);
@@ -40,6 +56,7 @@ export class ImmovableComponent implements OnInit {
       }
     );
   }
+  
 
   toggleForm() {
     this.isFormOpen = !this.isFormOpen;

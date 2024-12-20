@@ -1,0 +1,47 @@
+.container {
+  font-size: 14px; /* Reduce font size */
+  padding: 10px; /* Adjust container padding */
+}
+
+.card {
+  border: 1px solid #ccc;
+  background-color: #f8f9fa; /* Lighter color to match header/footer */
+  margin: 20px auto;
+  max-width: 90%; /* Adjust card width */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #343a40; /* Match footer color */
+  color: white;
+  font-size: 16px; /* Smaller font size for header */
+}
+
+.form-control {
+  font-size: 12px; /* Smaller input font size */
+  padding: 6px 10px; /* Compact padding */
+}
+
+.form-group label {
+  font-size: 13px; /* Smaller label font size */
+  color: #495057;
+}
+
+.map-container {
+  width: 100%;
+  height: 300px; /* Reduced map height */
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  font-size: 12px; /* Smaller button font size */
+  padding: 6px 12px;
+}
+
+.btn-secondary {
+  background-color: #343a40; /* Match footer/header color */
+  border-color: #343a40;
+}
+

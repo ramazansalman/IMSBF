@@ -4,6 +4,8 @@ import { MapComponent } from './pages/map/map.component';
 import { ImmovableComponent } from './pages/immovable/immovable.component';
 import { TestpageComponent } from './pages/testpage/testpage.component';
 import { MainPageComponent } from './pages/main-page/main-page.component';
+import { ImmovableAddComponent } from './pages/immovable-add/immovable-add.component';
+import { ImmovableEditComponent } from './pages/immovable-edit/immovable-edit.component';
 
 
 const routes: Routes = [
@@ -12,6 +14,8 @@ const routes: Routes = [
   { path: 'map', component: MapComponent }, // Map sayfası rotası
   { path: 'immovable', component: ImmovableComponent }, // Immovable sayfası];
   { path: 'testpage', component: TestpageComponent }, // Testpage sayfası];
+  { path: 'immovable-add', component: ImmovableAddComponent },
+  //{ path: 'immovable-edit/:id', component: ImmovableEditComponent },
   //{ path: '**', redirectTo: '' } // Redirect other routes to the main page if needed
   //{ path: '', component: ImmovableComponent }, // Anasayfayı Immovable'a yönlendir
   //{ path: 'home', component: HomeComponent }, // Ana sayfa bileşeni

@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using imsbackend.DataAccess;
 using System.Linq;
 
-
 namespace imsbackend.Controllers.Concrete
 {
     [Route("api/[controller]")]
@@ -61,8 +60,8 @@ namespace imsbackend.Controllers.Concrete
         {
             try
             {
-                var immovablelar = await _immovableService.GetByUserIdAsync(userId);
-                return Ok(immovablelar);
+                var immovables = await _immovableService.GetByUserIdAsync(userId);
+                return Ok(immovables);
             }
             catch (Exception ex)
             {
@@ -73,13 +72,18 @@ namespace imsbackend.Controllers.Concrete
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] Immovable immovable)
         {
+            if (immovable.UserId == 0)
+            {
+                return BadRequest("UserId is required.");
+            }
             try
             {
-                var createdTasinmaz = await _immovableService.AddAsync(immovable);
-                return CreatedAtAction(nameof(GetById), new { id = createdTasinmaz.Id }, createdTasinmaz);
+                var createdImmovable = await _immovableService.AddAsync(immovable);
+                return CreatedAtAction(nameof(GetById), new { id = createdImmovable.Id }, createdImmovable);
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error: {ex.Message}, Inner Exception: {ex.InnerException?.Message}");
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
@@ -89,12 +93,12 @@ namespace imsbackend.Controllers.Concrete
         {
             try
             {
-                var updatedTasinmaz = await _immovableService.UpdateAsync(id, immovable);
-                if (updatedTasinmaz == null)
+                var updatedImmovable = await _immovableService.UpdateAsync(id, immovable);
+                if (updatedImmovable == null)
                 {
                     return NotFound();
                 }
-                return Ok(updatedTasinmaz);
+                return Ok(updatedImmovable);
             }
             catch (Exception ex)
             {
@@ -145,6 +149,5 @@ namespace imsbackend.Controllers.Concrete
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
-
     }
 }

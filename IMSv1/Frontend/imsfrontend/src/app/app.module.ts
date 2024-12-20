@@ -12,6 +12,9 @@ import { ImmovableComponent } from './pages/immovable/immovable.component';
 import { TestpageComponent } from './pages/testpage/testpage.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MainPageComponent } from './pages/main-page/main-page.component';
+import { ImmovableAddComponent } from './pages/immovable-add/immovable-add.component';
+import { ImmovableEditComponent } from './pages/immovable-edit/immovable-edit.component';
+
 
 @NgModule({
   declarations: [
@@ -23,6 +26,8 @@ import { MainPageComponent } from './pages/main-page/main-page.component';
     ImmovableComponent,
     TestpageComponent,
     MainPageComponent,
+    ImmovableAddComponent,
+    ImmovableEditComponent,
   ],
   imports: [
     BrowserModule,

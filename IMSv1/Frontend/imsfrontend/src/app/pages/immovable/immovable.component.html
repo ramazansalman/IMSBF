@@ -1,8 +1,10 @@
 <h2>Immovables</h2>
 
-<button (click)="toggleForm()" class="btn btn-primary">
-  {{ isFormOpen ? 'Close' : 'Add Immovable' }}
-</button>
+<button class="btn btn-primary" [routerLink]="'/immovable-add'">Add Immovable</button>
+<!-- <button
+  class="btn btn-warning"
+  [disabled]="selectedImmovables.size !== 1"
+  [routerLink]="['/immovable-edit', Array.from(selectedImmovables)[0]]">Edit Immovable</button> -->
 <button class="btn btn-secondary my-2" (click)="loadData()">Refresh</button>
 <button class="btn btn-danger my-2" (click)="deleteSelected()" [disabled]="selectedImmovables.size === 0">Delete Selected</button>
 

@@ -1,0 +1,100 @@
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header text-white text-center">
+      <h6 class="mb-0">Add Immovable</h6>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="save()">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group mb-2">
+              <label for="city">City</label>
+              <select id="city" class="form-control" (change)="onCityChange($event.target.value)">
+                <option value="" disabled selected>Select a city</option>
+                <option *ngFor="let city of cities" [value]="city.id">{{ city.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group mb-2">
+              <label for="district">District</label>
+              <select id="district" class="form-control" (change)="onDistrictChange($event.target.value)" [disabled]="!selectedCity">
+                <option value="" disabled selected>Select a district</option>
+                <option *ngFor="let district of districts" [value]="district.id">{{ district.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group mb-2">
+              <label for="neighborhood">Neighborhood</label>
+              <select
+                id="neighborhood"
+                class="form-control"
+                [(ngModel)]="newImmovable.neighborhoodId"
+                name="neighborhoodId"
+                [disabled]="!selectedDistrict || neighborhoods.length === 0"
+                required
+              >
+                <option value="" disabled selected>Select a neighborhood</option>
+                <option *ngFor="let neighborhood of neighborhoods" [value]="neighborhood.id">{{ neighborhood.name }}</option>
+              </select>
+            </div>
+          </div>
+          
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group mb-2">
+              <label for="block">Block</label>
+              <input type="text" id="block" class="form-control" placeholder="Block" [(ngModel)]="newImmovable.block" name="block" required />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group mb-2">
+              <label for="parcel">Parcel</label>
+              <input type="text" id="parcel" class="form-control" placeholder="Parcel" [(ngModel)]="newImmovable.parcel" name="parcel" required />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group mb-2">
+              <label for="type">Type</label>
+              <input type="text" id="type" class="form-control" placeholder="Type" [(ngModel)]="newImmovable.type" name="type" required />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group mb-2">
+              <div class="form-group mb-2">
+                <label for="coordinates">Coordinates</label>
+                <div class="d-flex">
+                  <input
+                    type="text"
+                    id="coordinates"
+                    class="form-control"
+                    placeholder="Coordinates"
+                    [(ngModel)]="newImmovable.coordinates"
+                    name="coordinates"
+                    (input)="onCoordinatesChange()"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-danger ms-2"
+                    (click)="clearCoordinates()"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div></div>
+          </div>
+        </div>
+
+        <div id="map" class="map-container"></div>
+
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary me-2" (click)="cancel()">Cancel</button>
+          <button type="submit" class="btn btn-success">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
