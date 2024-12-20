@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms'; // FormsModule'u ekleyin
 import { ImmovableComponent } from './pages/immovable/immovable.component';
 import { TestpageComponent } from './pages/testpage/testpage.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MainPageComponent } from './pages/main-page/main-page.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NavbarComponent,
     ImmovableComponent,
     TestpageComponent,
+    MainPageComponent,
   ],
   imports: [
     BrowserModule,
